@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {Select, Store} from '@ngxs/store';
+import {CounterState} from './stores/counter/counter.state';
+import {Observable} from 'rxjs';
+import {Counter} from './stores/counter/counter.actions';
+import Increase = Counter.Increase;
+import Decrease = Counter.Decrease;
+import ResetToDefault = Counter.ResetToDefault;
 
 @Component({
   selector: 'app-root',
@@ -6,5 +13,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'ngxs-counter';
+  @Select(CounterState.counter) counter$: Observable<number>;
+
+  constructor(private store: Store) {}
+
+  reset() {
+    this.store.dispatch( new ResetToDefault() );
+  }
+
+  increase() {
+    this.store.dispatch( new Increase() );
+  }
+
+  decrease() {
+    this.store.dispatch( new Decrease() );
+  }
 }
